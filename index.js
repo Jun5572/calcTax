@@ -7,12 +7,6 @@ let result = document.getElementById('display_result');
 let taxRate = 0.08;
 
 
-// エラーを吐いた時のメッセージとスタイルをセット
-function setMessageAndStyle( element, message, className, prop, value ){
-	element.innerText = message;
-	element.classList.add(className);
-	element.style.prop = value;
-};
 
 // エラーを吐いた状態から入力フォームにフォーカスした場合、エラー表示部分のCSSをリセットする。
 input.addEventListener('focus', function(){
@@ -23,22 +17,34 @@ input.addEventListener('focus', function(){
 	};
 });
 
+
+// エラーを吐いた時のメッセージとスタイルをセット
+function setMessageAndStyle( element, message, className, prop, value ){
+	element.innerText = message;
+	element.style[prop] = value;
+	element.classList.add(className);
+};
+
+function addClass( element, className ){
+	element.classList.add(className);
+};
+function removeClass( element, className ){
+	element.classList.remove(className);
+};
+
+
 calc_button.addEventListener('click', function(){
 // inputが空欄の場合エラーを吐く
 	if( input.value === '' ){
-		setMessageAndStyle( result, ERROR_NULL_FORM, 'error_message', background, 'crimson');
-		// result.innerText = ERROR_NULL_FORM;
-		// result.classList.add('error_message');
-		// result.style.background = 'crimson';
-		input.classList.add('is_error');
+		setMessageAndStyle( result, ERROR_NULL_FORM, 'error_message', 'background', 'crimson');
+		addClass( input, 'is_error' );
 		return result;
 	};
+
 // inputが数値以外の場合エラーを吐く
 	if ( isNaN(input.value)){
-		result.innerText = ERROR_WRONG_DATA;
-		result.classList.add('error_message');
-		result.style.background = 'crimson';
-		input.classList.add('is_error');
+		setMessageAndStyle( result, ERROR_WRONG_DATA, 'error_message', 'background', 'crimson');
+		addClass( input, 'is_error' );
 		return result;
 	};
 
@@ -50,8 +56,8 @@ calc_button.addEventListener('click', function(){
 	};
 
 	let resultCalc = getPriceInTaxRate(input.value, taxRate);
-	result.classList.remove('error_message');
-	input.classList.remove('is_error');
+	removeClass( result, 'error_message' );
+	removeClass( input, 'is_error' );
 	result.innerHTML = `${input.value}円の税込価格は、${resultCalc}円です`;
 	input.value = '';
 });
