@@ -1,5 +1,6 @@
 const ERROR_NULL_FORM = "何か値を入力してください！";
 const ERROR_WRONG_DATA = "数値を入力してください！";
+const ERROR_FULLWIDTH = "半角数字を入力してください！"
 
 let calc_button = document.getElementById('calc_button');
 let input = document.getElementById('input');
@@ -32,8 +33,19 @@ function removeClass( element, className ){
 	element.classList.remove(className);
 };
 
+// 全角文字かどうかを判別(true / false がreturn)
+function checkFullWidthForm( input ){
+	return input.match(/^[^\x01-\x7E\xA1-\xDF]+$/);
+};
+
 
 calc_button.addEventListener('click', function(){
+// inputが全角の数値の場合もユーザーに喚起する
+	if( checkFullWidthForm(input.value) ){
+		setMessageAndStyle( result, ERROR_FULLWIDTH, 'error_message', 'background', 'crimson');
+		addClass( input, 'is_error' );
+		return result;
+	};
 // inputが空欄の場合エラーを吐く
 	if( input.value === '' ){
 		setMessageAndStyle( result, ERROR_NULL_FORM, 'error_message', 'background', 'crimson');
@@ -42,11 +54,31 @@ calc_button.addEventListener('click', function(){
 	};
 
 // inputが数値以外の場合エラーを吐く
-	if ( isNaN(input.value)){
+	if( isNaN(input.value)){
 		setMessageAndStyle( result, ERROR_WRONG_DATA, 'error_message', 'background', 'crimson');
 		addClass( input, 'is_error' );
 		return result;
 	};
+
+
+	// switch (input.value){
+	// 	// 全角文字が入力された場合
+	// 	case checkFullWidthForm(input.value) === true && isNaN(input.value) === true:
+	// 		setMessageAndStyle( result, ERROR_FULLWIDTH, 'error_message', 'background', 'crimson');
+	// 		addClass( input, 'is_error' );
+	// 		return result;
+	// 	// ブランクの場合
+	// 	case input.value === '':
+	// 		setMessageAndStyle( result, ERROR_NULL_FORM, 'error_message', 'background', 'crimson');
+	// 		addClass( input, 'is_error' );
+	// 		return result;
+	// 	// 数値以外
+	// 	case isNaN(input.value) === true:
+	// 		setMessageAndStyle( result, ERROR_WRONG_DATA, 'error_message', 'background', 'crimson');
+	// 		addClass( input, 'is_error' );
+	// 		return result;
+	// };
+
 
 // 正しく数値が入力されたときは以下の処理が走る
 	function getPriceInTaxRate(input, taxRate) {
