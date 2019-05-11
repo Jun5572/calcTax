@@ -55,7 +55,6 @@ function checkFullWidthForm( input ){
 
 //小数値かどうかを判別(true / false)
 function checkFloat( input ){
-	console.log(pattern.test(input));
 	return pattern.test(input);
 };
 
