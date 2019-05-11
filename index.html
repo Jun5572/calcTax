@@ -3,16 +3,54 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible">
-	<title></title>
+	<title>消費税計算</title>
 	<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 	<main>
 		<div class="wrapper">
 			<h2>税込価格の計算</h2>
-			<input id="input" type="text" placeholder="数値を入力">
-			<button id="calc_button" type="button" class="calc_button">計算</button>
-			<p id="display_result"></p>
+			<section class="inner_wrapper">
+				<div class="style-block">
+					<label>金額</label>
+					<input id="input" type="text" placeholder="数値を入力">
+				</div>
+
+				<div class="style-block">
+					<label>購入品</label>
+					<select data-js="category">
+						<option value="0" selected></option>
+						<option value="1">食品</option>
+						<option value="2">それ以外</option>
+					</select>
+				</div>
+
+				<div class="style-block">
+					<label>支払い方法</label>
+					<select data-js="payment_type">
+						<option value="0" selected></option>
+						<option value="1">現金払い</option>
+						<option value="2">クレジットカード</option>
+					</select>
+				</div>
+			</section>
+
+			<p id="display_errors"></p>
+			<button id="calc_button" type="button" class="calc_button">決定</button>
+			<div id="display_result">
+				<div class="display_result_wrapper">
+					<h3>結果</h3>
+					<div class="result_area">
+						<div class="result_list">
+							<label>税込金額</label>
+							<label>消費税</label>
+							<label>キャッシュバック</label>
+						</div>
+						<div class="result_info" data-js="result_info">
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</main>
 	<script src="env/app_config.js"></script>

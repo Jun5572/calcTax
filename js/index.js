@@ -2,8 +2,11 @@
 let calc_button = document.getElementById('calc_button');
 let input = document.getElementById('input');
 let result = document.getElementById('display_result');
-let taxRate = 0.08;
-
+let errors = document.getElementById('display_errors');
+let category = document.querySelector('[data-js="category"]');
+let payment_type = document.querySelector('[data-js="payment_type"]');
+let result_info = document.querySelector('[data-js="result_info"]');
+let selected_data = {};
 // エラーを吐いた時のメッセージとスタイルをセットする関数
 //		element = ターゲットとなる要素
 //		message = メッセージの種類
@@ -14,6 +17,27 @@ function setMessageAndStyle( element, message, className, prop, value ){
 	element.innerText = message;
 	element.style[prop] = value;
 	element.classList.add(className);
+};
+
+// 消費税を算出する関数
+function getTaxRate(item){
+	if (item === "1"){
+		return taxRate8;
+	} else {
+		return taxRate10;
+	}
+};
+
+// キャッシュバック金額を算出
+function getCashBack( price, taxRate, paymentType, cashBackRate ){
+	if( taxRate === 0.1 && paymentType === "2"){
+		let num = parseInt( price, 10);
+		console.log(num);
+		console.log(cashBackRate);
+		return num * cashBackRate;
+	} else {
+		return 0;
+	}
 };
 
 // クラス追加、削除
@@ -39,42 +63,89 @@ function getPriceInTaxRate( input, taxRate ) {
 //Enterキーの押下イベント時に発火できるように関数化
 function pushCalcButton() {
 	if( checkFullWidthForm(input.value) ){ // 入力値が全角の場合trueとなりエラーを吐く
-		setMessageAndStyle( result, MESSAGES.WARNING.FULLWIDTH, 'error_message', 'background', 'crimson');
+		setMessageAndStyle( errors, MESSAGES.ERROR.E1, 'error_message', 'background', 'crimson');
 		addClass( input, 'is_error' );
-		return result;
+		result_info.innerText = "";
+		return errors;
 	};
 
 	if( input.value === '' ){ // 入力値が空欄の場合trueとなりエラーを吐く
-		setMessageAndStyle( result, MESSAGES.ERROR.NULL_FORM, 'error_message', 'background', 'crimson');
+		setMessageAndStyle( errors, MESSAGES.ERROR.E1, 'error_message', 'background', 'crimson');
 		addClass( input, 'is_error' );
-		return result;
+		result_info.innerText = "";
+		return errors;
 	};
 
 	if( isNaN(input.value)){ // 入力値が数値以外の場合trueとなりエラーを吐く
-		setMessageAndStyle( result, MESSAGES.WARNING.WRONG_DATA, 'error_message', 'background', 'crimson');
+		setMessageAndStyle( errors, MESSAGES.ERROR.E1, 'error_message', 'background', 'crimson');
 		addClass( input, 'is_error' );
-		return result;
+		result_info.innerText = "";
+		return errors;
 	};
 
+	if(! selected_data['category'] || selected_data['category'] === "0"){
+		setMessageAndStyle( errors, MESSAGES.ERROR.E2, 'error_message', 'background', 'crimson');
+		result_info.innerText = "";
+		return errors;
+	} else if(! selected_data['payment_type'] || selected_data['payment_type'] === "0"){
+		setMessageAndStyle( errors, MESSAGES.ERROR.E2, 'error_message', 'background', 'crimson');
+		result_info.innerText = "";
+		return errors;
+	}
 
+	let taxRate = getTaxRate(selected_data.category);
+	let cash_back = getCashBack(input.value, taxRate, selected_data.payment_type, cashBackRate);
 	let resultCalc = getPriceInTaxRate( input.value, taxRate );
 
 	removeClass( result, 'error_message' );
 	removeClass( input, 'is_error' );
-	result.innerHTML = `${input.value}円の税込価格は、${resultCalc}円です`;
+	selected_data['price'] = input.value;
+	console.log(selected_data);
+	// result.innerHTML = `${input.value}円の税込価格は、${resultCalc}円です`;
+
+	let result_item = '';
+	result_item += `<p>${resultCalc}円</p>`;
+	result_item += `<p>${taxRate * 100}%</p>`;
+	result_item += `<p>${cash_back}円</p>`;
+
+	console.log(result_item);
+	result_info.innerHTML = result_item;
+	result_item = '';
 };
+
+
 
 
 // エラーを吐いた状態から入力フォームにフォーカスした場合、エラー表示部分のCSSをリセットする。
 input.addEventListener('focus', function(){
 	if ( input.classList =~ "is_error"){
 		removeClass( input, 'is_error' );
-		result.style.background = 'transparent';
+		errors.style.background = 'transparent';
 		input.value = '';
-		result.innerText = '';
+		errors.innerText = '';
+	};
+});
+category.addEventListener('focus', function(){
+	if ( category.classList =~ "is_error"){
+		removeClass( input, 'is_error' );
+		errors.style.background = 'transparent';
+		errors.innerText = '';
 	};
 });
 
 
-// 計算ボタンが押下されたときの処理。Enterキー押下でも発火するようにしたい
+// 決定ボタンが押下されたときの処理。Enterキー押下でも発火するようにしたい
 calc_button.addEventListener('click', pushCalcButton );
+
+category.addEventListener('change', function(){
+	selected_data['category'] = category.value;
+	errors.style.background = 'transparent';
+	errors.innerText = '';
+});
+
+payment_type.addEventListener('change', function(){
+	selected_data['payment_type'] = payment_type.value;
+	errors.style.background = 'transparent';
+	errors.innerText = '';
+
+});

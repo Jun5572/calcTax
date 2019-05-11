@@ -15,12 +15,14 @@ main{
 .wrapper{
 	text-align: center;
     margin-top: 50px;
-    width: 500px;
-    max-height: 250px;
+    width: 90%;
     padding-top: 100px;
     background: aliceblue;
     border-radius: 10px;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+.wrapper .inner_wrapper select{
+	min-width: 200px;
 }
 .wrapper h2{
 	text-align: center;
@@ -32,7 +34,23 @@ main{
     text-align: center;
     padding: 5px 10px;
 }
+.wrapper .inner_wrapper{
+    display: flex;
+    margin: 0 auto;
+	width: 90%;
+    flex-direction: row;
+    justify-content: center;
+}
+.style-block{
+	margin: 5px 30px;
+}
+.style-block label{
+	display: block;
+}
+
 .error_message{
+	margin: 0 auto;
+	width: 50%;
 	font-weight: bold;
 	background: transparent;
 	color: #fff;
@@ -55,22 +73,9 @@ input[type="text"]:focus{
 input[type="text"].is_error{
 	border-bottom: 2px solid crimson;
 }
-/*input[type="text"]::after{
-	content: '';
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	width: 100%;
-	height: 2px;
-	background-color: #1a7c6b;
-	transform-origin: center center;
-	transform: scaleX(0);
-	transition: transform 300ms ease-in-out;
+select.is_select_error{
+	border: solid 2px crimson;
 }
-input[type="text"]:focus::after{
-	transform: scaleX(1);
-	transition: transform 200ms ease-in-out;
-}*/
 input[type="text"]::placeholder{
 	color: #888;
 	opacity: 0.5;
@@ -93,4 +98,36 @@ input[type="text"]::placeholder{
 .calc_button:active{
 	box-shadow: none;
 	transform: translateY(5px);
+}
+
+.display_result_wrapper{
+	width: 50%;
+	margin: 20px auto;
+	padding: 10px;
+	border-radius: 5px;
+	text-align: center;
+	background: silver;
+}
+.display_result_wrapper label{
+	display: block;
+}
+.display_result_wrapper p{
+	margin: 0;
+	padding: 0;
+}
+.result_area{
+	display: flex;
+	flex-direction: row;
+}
+.result_list,
+.result_info{
+	width: 50%;
+}
+table{
+	margin: 0 auto;
+}
+
+table tr th,
+table tr td{
+	text-align: left;
 }
