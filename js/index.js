@@ -7,6 +7,8 @@ let category = document.querySelector('[data-js="category"]');
 let payment_type = document.querySelector('[data-js="payment_type"]');
 let result_info = document.querySelector('[data-js="result_info"]');
 let selected_data = {};
+// 少数点の入力をはじくためのパターン
+let pattern = /^([1-9]\d*|0)$/;
 // エラーを吐いた時のメッセージとスタイルをセットする関数
 //		element = ターゲットとなる要素
 //		message = メッセージの種類
@@ -51,6 +53,12 @@ function checkFullWidthForm( input ){
 	return input.match(/^[^\x01-\x7E\xA1-\xDF]+$/);
 };
 
+//小数値かどうかを判別(true / false)
+function checkFloat( input ){
+	console.log(pattern.test(input));
+	return pattern.test(input);
+};
+
 // 数値が入力されたときは以下の処理が走る
 function getPriceInTaxRate( input, taxRate ) {
 	// フォームの入力値を10進数に変換
@@ -60,6 +68,7 @@ function getPriceInTaxRate( input, taxRate ) {
 
 //Enterキーの押下イベント時に発火できるように関数化
 function pushCalcButton() {
+
 	if( checkFullWidthForm(input.value) ){ // 入力値が全角の場合trueとなりエラーを吐く
 		setMessageAndStyle( errors, MESSAGES.ERROR.E1, 'error_message', 'background', 'crimson');
 		addClass( input, 'is_error' );
@@ -80,6 +89,13 @@ function pushCalcButton() {
 		result_info.innerText = "";
 		return errors;
 	};
+
+	if(! checkFloat(input.value)){ // float型のチェック
+		setMessageAndStyle( errors, MESSAGES.ERROR.E1, 'error_message', 'background', 'crimson');
+		addClass( input, 'is_error' );
+		result_info.innerText = "";
+		return errors;
+	}
 
 	if(! selected_data['category'] || selected_data['category'] === "0"){
 		setMessageAndStyle( errors, MESSAGES.ERROR.E2, 'error_message', 'background', 'crimson');
