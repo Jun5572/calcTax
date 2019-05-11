@@ -32,8 +32,6 @@ function getTaxRate(item){
 function getCashBack( price, taxRate, paymentType, cashBackRate ){
 	if( taxRate === 0.1 && paymentType === "2"){
 		let num = parseInt( price, 10);
-		console.log(num);
-		console.log(cashBackRate);
 		return num * cashBackRate;
 	} else {
 		return 0;
@@ -100,15 +98,12 @@ function pushCalcButton() {
 	removeClass( result, 'error_message' );
 	removeClass( input, 'is_error' );
 	selected_data['price'] = input.value;
-	console.log(selected_data);
-	// result.innerHTML = `${input.value}円の税込価格は、${resultCalc}円です`;
 
 	let result_item = '';
 	result_item += `<p>${resultCalc}円</p>`;
 	result_item += `<p>${taxRate * 100}%</p>`;
 	result_item += `<p>${cash_back}円</p>`;
 
-	console.log(result_item);
 	result_info.innerHTML = result_item;
 	result_item = '';
 };
