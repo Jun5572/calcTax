@@ -51,6 +51,9 @@ main{
 	display: block;
 }
 
+#display_errors{
+	height: 1.5em;
+}
 .error_message{
 	margin: 0 auto;
 	width: 50%;

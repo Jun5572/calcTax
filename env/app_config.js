@@ -3,7 +3,7 @@ const MESSAGES = {
 			CALC_SUCCESS : "正常に計算できました！"
 		},
 		WARNING :{
-			FULLWIDTH : "半角数字で入力してください！",
+			ZENKAKU : "半角数字で入力してください！",
 			WRONG_DATA : "数値を入力してください！",
 		},
 		ERROR :{
@@ -12,6 +12,6 @@ const MESSAGES = {
 			E2 : "購入品・支払い方法が選択されていません。"
 		}
 };
-const taxRate8 = 0.08;
-const taxRate10 = 0.1;
-const cashBackRate = 0.02;
+const tax_8per = 0.08;
+const tax_10per = 0.1;
+const cash_back_rate = 0.02;
